@@ -1,0 +1,87 @@
+# 模型注册表。换模型 = 改这里 + 命令行 --model 换名字。
+# 全部走 OpenAI 兼容协议，新增模型照着抄一段即可。
+#
+# 密钥一律从环境变量读，不要写进文件：
+#   export DASHSCOPE_API_KEY=sk-xxx
+#   export DEEPSEEK_API_KEY=sk-xxx
+
+defaults: &defaults
+  temperature: 0.0
+  timeout: 20
+  max_retries: 2
+  max_concurrency: 8
+  max_tokens: 256
+
+models:
+  deepseek-chat:
+    <<: *defaults
+    model: deepseek-chat
+    base_url: https://api.deepseek.com/v1
+    api_key_env: DEEPSEEK_API_KEY
+
+  qwen-max:
+    <<: *defaults
+    model: qwen-max
+    base_url: https://dashscope.aliyuncs.com/compatible-mode/v1
+    api_key_env: DASHSCOPE_API_KEY
+
+  qwen-plus:
+    <<: *defaults
+    model: qwen-plus
+    base_url: https://dashscope.aliyuncs.com/compatible-mode/v1
+    api_key_env: DASHSCOPE_API_KEY
+
+  glm-4-plus:
+    <<: *defaults
+    model: glm-4-plus
+    base_url: https://open.bigmodel.cn/api/paas/v4
+    api_key_env: ZHIPU_API_KEY
+
+  moonshot-v1-8k:
+    <<: *defaults
+    model: moonshot-v1-8k
+    base_url: https://api.moonshot.cn/v1
+    api_key_env: MOONSHOT_API_KEY
+
+  gpt-4o-mini:
+    <<: *defaults
+    model: gpt-4o-mini
+    base_url: https://api.openai.com/v1
+    api_key_env: OPENAI_API_KEY
+
+  # 本地 vLLM / Ollama，离线部署时用（数据不出内网）
+  local-vllm:
+    <<: *defaults
+    model: qwen2.5-7b-instruct
+    base_url: http://127.0.0.1:8000/v1
+    api_key: "sk-local"
+    max_concurrency: 4
+
+  # 公司内部 AI Router
+  qwen3.8-27b:
+    <<: *defaults
+    model: qwen3.8-27b
+    base_url: http://dev.router.ai.sczlcq.com/v1
+    api_key_env: AIROUTER_API_KEY
+    max_concurrency: 4
+    timeout: 60
+    max_tokens: 2048
+
+  # 同路由的 GPT 系列（用于模型对比测试）
+  gpt-5.6-sol:
+    <<: *defaults
+    model: gpt-5.6-sol
+    base_url: http://dev.router.ai.sczlcq.com/v1
+    api_key_env: AIROUTER_API_KEY
+    max_concurrency: 4
+    timeout: 60
+    max_tokens: 2048
+
+  gpt-6-sol:
+    <<: *defaults
+    model: gpt-6-sol
+    base_url: http://dev.router.ai.sczlcq.com/v1
+    api_key_env: AIROUTER_API_KEY
+    max_concurrency: 4
+    timeout: 60
+    max_tokens: 2048

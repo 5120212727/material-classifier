@@ -1,0 +1,6 @@
+# 炼铁专业报价表布局
+header_row: 2
+data_start_row: 4
+name_col: 6        # 工程或费用名称
+spec_col: 7        # 型号、规格及技术性能
+skip_keywords: [小计, 合计, 总计, 合价, 其中]

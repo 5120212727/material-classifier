@@ -1,0 +1,9 @@
+header_row: 1
+data_start_row: 5
+name_col: 4
+spec_col: 5
+skip_keywords:
+- 小计
+- 合计
+- 总计
+- 合价

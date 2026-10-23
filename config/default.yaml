@@ -1,0 +1,41 @@
+# 全局配置。改这里，不改代码。
+
+knowledge_base: data/history.xlsx    # 历史物料知识库
+cache_dir: cache                    # 索引缓存
+layout_dir: config/layouts          # 清单布局配置
+models_path: config/models.yaml     # 模型注册表
+
+normalize:
+  strip_tags: true                  # 剥离设备位号（TK301/P401/C1）
+  drop_placeholders: true           # 剔除「详见技术规格书」这类占位符
+
+retrieve:
+  topk: 10                          # 每路召回的候选数
+  name_weight: 0.75                 # 名称特征权重（实测名称信号 > 规格）
+  spec_weight: 0.25
+  min_df: 2
+  dirty_b_patterns: []               # 脏标签过滤（大类/中类含这些词则剔除）；[]=信任全部历史标签
+
+decide:
+  strategy: knn_vote                # knn_vote | llm_rerank | llm_direct
+  model: deepseek-chat              # 仅 LLM 策略使用，见 models.yaml
+
+  knn_vote:
+    knn_topk: 5                     # 近邻投票取前几条
+    exact_conf_cap: 0.88            # 名称对齐路径的置信度上限（对应实测准确率 87.5%）
+    sim_low: 0.30                   # 相似度校准下限：低于此值投票权重打折
+    sim_high: 0.70                  # 相似度校准上限：高于此值不打折
+    reject_sim: 0.28                # 低于此相似度直接拒识，不硬归类
+
+  llm_rerank:
+    candidate_cap: 6                # 给 LLM 的候选类目数
+    max_llm_items: 0                # >0 时只对前 N 条调模型，调试省钱用
+
+  llm_direct: {}
+
+sheets:
+  include: []                       # 空 = 全部；填了就只处理这些页签
+  exclude: [利润表, 工程量对比]      # 非物料明细的汇总/对比表，跳过
+
+output:
+  dir: out
